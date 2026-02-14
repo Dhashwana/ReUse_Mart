@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>User Dashboard</title>
+    <link rel="stylesheet" href="UserDashStyle.css">
+</head>
+<body>
+
+<!-- Navbar -->
+<nav class="navbar">
+    <div class="logo">Community Recycling Marketplace</div>
+    <div class="nav-right">
+        <span id="welcomeUser"></span>
+        <button id="logoutBtn">Logout</button>
+    </div>
+</nav>
+
+<!-- Dashboard Content -->
+<div class="dashboard">
+
+    <!-- Overview Cards -->
+    <div class="cards">
+        <div class="card">
+            <h3 id="totalWaste">0</h3>
+            <p>Total Waste Listed</p>
+        </div>
+        <div class="card">
+            <h3 id="pendingWaste">0</h3>
+            <p>Pending Requests</p>
+        </div>
+        <div class="card">
+            <h3 id="completedWaste">0</h3>
+            <p>Completed Pickups</p>
+        </div>
+    </div>
+
+    <!-- Add Waste Button -->
+    <button class="add-btn" id="openModal">+ Add Waste</button>
+
+    <!-- Waste Requests Table -->
+    <table id="wasteTable">
+        <thead>
+            <tr>
+                <th>Type</th>
+                <th>Quantity</th>
+                <th>Unit</th>
+                <th>Date</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+
+</div>
+
+<!-- Popup Modal -->
+<div class="modal" id="wasteModal">
+    <div class="modal-content">
+        <span class="close-btn" id="closeModal">&times;</span>
+        <h2>Add Waste</h2>
+
+        <form id="wasteForm">
+            <select id="wasteType" required>
+                <option value="">Select Waste Type</option>
+                <option>Plastic</option>
+                <option>Paper</option>
+                <option>Glass</option>
+                <option>Metal</option>
+                <option>E-Waste</option>
+                <option>Clothes</option>
+                <option>Cardboard</option>
+                <option>Other</option>
+            </select>
+
+            <input type="number" id="quantity" placeholder="Quantity" required>
+
+            <select id="unit" required>
+                <option value="">Select Unit</option>
+                <option>Pieces</option>
+                <option>Kg</option>
+                <option>Bags</option>
+                <option>Boxes</option>
+            </select>
+
+            <input type="date" id="pickupDate" required>
+
+            <textarea id="notes" placeholder="Additional Notes (Optional)"></textarea>
+
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+</div>
+
+<script src="UserDashJS.js"></script>
+</body>
+</html>

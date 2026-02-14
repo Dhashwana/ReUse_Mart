@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Recycler Dashboard</title>
+    <link rel="stylesheet" href="UserDashStyle.css">
+</head>
+<body>
+
+<!-- Navbar -->
+<nav class="navbar">
+    <div class="logo">Community Recycling Marketplace</div>
+    <div class="nav-right">
+        <span id="welcomeRecycler"></span>
+        <button id="logoutBtn">Logout</button>
+    </div>
+</nav>
+
+<div class="dashboard">
+
+    <!-- Overview Cards -->
+    <div class="cards">
+        <div class="card">
+            <h3 id="totalRequests">0</h3>
+            <p>Total Requests</p>
+        </div>
+        <div class="card">
+            <h3 id="pendingRequests">0</h3>
+            <p>Pending</p>
+        </div>
+        <div class="card">
+            <h3 id="acceptedRequests">0</h3>
+            <p>Accepted</p>
+        </div>
+        <div class="card">
+            <h3 id="completedRequests">0</h3>
+            <p>Completed</p>
+        </div>
+    </div>
+
+    <!-- Requests Table -->
+    <table id="recyclerTable">
+        <thead>
+            <tr>
+                <th>User</th>
+                <th>Type</th>
+                <th>Quantity</th>
+                <th>Unit</th>
+                <th>Date</th>
+                <th>Location</th>
+                <th>Status</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+
+</div>
+
+<script src="RecycleDashJS.js"></script>
+</body>
+</html>

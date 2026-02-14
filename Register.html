@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Register - Community Recycling Marketplace</title>
+    <link rel="stylesheet" href="LoginStyle.css">
+</head>
+<body>
+
+<div class="login-container">
+    <h2>Register</h2>
+
+    <form id="registerForm">
+        <input type="text" id="name" placeholder="Full Name" required>
+        <input type="email" id="email" placeholder="Email" required>
+        <input type="password" id="password" placeholder="Password" required>
+        <input type="text" id="location" placeholder="Location (Area)" required>
+        
+        <label>Select Role:</label>
+        <select id="role" required>
+            <option value="">Choose Role</option>
+            <option value="user">User</option>
+            <option value="recycler">Recycler</option>
+        </select>
+        
+        <button type="submit">Register</button>
+    </form>
+
+    <p>Already have an account?
+        <a href="Login.html">Login here</a>
+    </p>
+</div>
+
+<script src="RegisterJS.js"></script>
+</body>
+</html>
