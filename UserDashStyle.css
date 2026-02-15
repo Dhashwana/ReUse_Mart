@@ -6,15 +6,47 @@ body{
 .navbar {
     display: flex;
     justify-content: space-between;
-    padding: 15px 30px;
+    align-items: center;
+    padding: 15px 20px;
+    border-radius: 12px;
     background: #2e7d32;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
     color: white;
 }
 
-.nav-right button {
-    margin-left: 15px;
-    padding: 5px 10px;
+.nav-center {
+    display: flex;
+    gap: 15px;
+}
+
+.nav-center button {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 16px;
     cursor: pointer;
+    padding: 6px 12px;
+}
+
+.nav-right button {
+    padding: 3px 7px;
+    border: none;
+    border-radius: 6px;
+    background: white;
+    color: #1b5e20;
+    cursor: pointer;
+    font-weight: 500;
+}
+
+.active-tab {
+    background: white;
+    color: #2e7d32;
+    border-radius: 6px;
+    font-weight: bold;
+}
+
+.nav-right button:hover {
+    background: #e8f5e9;
 }
 
 /* Dashboard */
@@ -25,9 +57,8 @@ body{
 /* Cards */
 .cards {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(4, 1fr);
     gap: 30px;
-    justify-content: center;
     margin-bottom: 20px;
 }
 
@@ -126,4 +157,32 @@ th, td {
 .status-denied {
     background: #f8d7da;
     color: #721c24;
+}
+
+.reuse-form {
+    margin: 20px 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.reuse-form input,
+.reuse-form select,
+.reuse-form textarea {
+    padding: 8px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+}
+
+.reuse-form button {
+    background: #2e7d32;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.reuse-form button:hover {
+    background: #1b5e20;
 }

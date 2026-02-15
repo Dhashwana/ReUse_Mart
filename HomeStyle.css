@@ -3,42 +3,51 @@ body {
     height: 100vh;
     display: flex;
     flex-direction: column;
-    background: linear-gradient(to right, #d4fc79, #96e6a1);
+    background: linear-gradient(135deg, #c8e6c9, #a5d6a7);
     font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
 }
 
 header {
     display: flex;
     justify-content: flex-end;
-    padding: 20px;
+    align-items: center;
+    padding: 20px 40px;
 }
 
 .header-right {
     display: flex;
     align-items: center;
     gap: 20px;
+    animation: fadeIn 1s ease-in-out
 }
 
 .login-btn {
     text-decoration: none;
-    color: black;
-    font-weight: bold;
+    color: #1b5e20;
+    font-weight: 600;
+    transition: 0.3s ease;
+}
+
+.login-btn:hover{
+    color: #0d3b12;
 }
 
 .menu button {
-    font-size: 24px;
+    font-size: 26px;
     background: none;
     border: none;
     cursor: pointer;
+    color: #1b5e20;
+    animation: fadeIn 1s ease-in-out
 }
 
 .dropdown {
     position: absolute;
-    right: 20px;
-    top: 60px;
+    right: 40px;
+    top: 70px;
     background: white;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
-    border-radius: 6px;
+    border-radius: 10px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
     overflow: hidden;
 
     opacity: 0;
@@ -55,13 +64,14 @@ header {
 
 .dropdown a {
     display: block;
-    padding: 10px 20px;
+    padding: 12px 20px;
     text-decoration: none;
-    color: black;
+    color: #1b5e20;
+    transition: 0.2s ease;
 }
 
 .dropdown a:hover {
-    background: #f0f0f0;
+    background: #e8f5e9;
 }
 
 main {
@@ -70,13 +80,114 @@ main {
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    text-align: center;
+    animation: fadeIn 1s ease-in-out;
+}
+
+.brand{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.logo{
+    height: 110px;
+}
+
+.title {
+    font-size: 42px;
+    color: #1b5e20;
+    margin: 0;
 }
 
 h1 {
-    font-size: 42px;
+    font-size: 48px;
+    letter-spacing: 1px;
+    color: #1b5e20;
 }
 
 .quote {
+    font-size: 18px;
+    margin-top: 15px;
+    color: #2e7d32;
     font-style: italic;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(15px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.about-page {
+    display: flex;
+    padding: 60px 20px;
+}
+
+.about-container {
+    background: rgba(255,255,255,0.95);
+    padding: 60px;
+    max-width: 850px;
+    margin: 60px auto;
+    border-radius: 18px;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.08);
+    text-align: left;
+}
+
+.about-container h1 {
+    text-align: center;
+    color: #1b5e20;
+    margin-bottom: 30px;
+}
+
+.about-container h2 {
+    margin-top: 40px;
+    margin-bottom: 15px;
+    color: #2e7d32;
+}
+
+.about-container p {
+    line-height: 1.7;
+    margin-bottom: 20px;
+}
+
+.objectives {
+    padding-left: 20px;
+    margin-bottom: 20px;
+}
+
+.objectives li {
+    margin: 8px 0;
+    line-height: 1.7;
+}
+
+.sdg {
+    margin-top: 25px;
+    font-weight: 600;
+    color: #1b5e20;
+}
+
+.cta {
+    margin-top: 40px;
+    text-align: center;
+}
+
+.cta-btn {
+    display: inline-block;
     margin-top: 10px;
+    padding: 10px 20px;
+    background: #2e7d32;
+    color: white;
+    text-decoration: none;
+    border-radius: 8px;
+    transition: 0.3s ease;
+}
+
+.cta-btn:hover {
+    background: #1b5e20;
+}
+
+.about-container a {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
 }

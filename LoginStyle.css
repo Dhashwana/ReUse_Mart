@@ -8,6 +8,7 @@
 body{
     font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
     margin: 0;
+    background: linear-gradient(135deg, #c8e6c9, #a5d6a7);
 }
 
 .login-container {
@@ -16,7 +17,7 @@ body{
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    background: linear-gradient(to right, #d4fc79, #96e6a1);
+    background: linear-gradient(135deg, #c8e6c9, #a5d6a7);
 }
 
 .login-container h2 {
@@ -54,4 +55,8 @@ body{
     padding: 10px;
     border-radius: 5px;
     border: 1px solid #ccc;
+}
+
+.logo{
+    height: 60px;
 }

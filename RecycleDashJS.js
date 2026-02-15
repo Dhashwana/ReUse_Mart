@@ -1,22 +1,33 @@
+// ================= LOGIN CHECK =================
 const loggedUser = JSON.parse(localStorage.getItem("loggedInUser"));
 
 if (!loggedUser || loggedUser.role !== "recycler") {
-    window.location.href = "login.html";
+    window.location.href = "Login.html";
 }
 
-document.getElementById("welcomeRecycler").innerText =
-    "Welcome, " + loggedUser.name;
+// ================= WELCOME =================
+const welcomeRecycler = document.getElementById("welcomeRecycler");
+if (welcomeRecycler) {
+    welcomeRecycler.innerText = "Welcome, " + loggedUser.name;
+}
 
-document.getElementById("logoutBtn").addEventListener("click", () => {
-    localStorage.removeItem("loggedInUser");
-    window.location.href = "login.html";
-});
+// ================= LOGOUT =================
+const logoutBtn = document.getElementById("logoutBtn");
+if (logoutBtn) {
+    logoutBtn.addEventListener("click", () => {
+        localStorage.removeItem("loggedInUser");
+        window.location.href = "index.html";
+    });
+}
 
+// ================= LOAD REQUESTS =================
 function loadRequests() {
     const wastes = JSON.parse(localStorage.getItem("wastes")) || [];
     const users = JSON.parse(localStorage.getItem("users")) || [];
 
     const tbody = document.querySelector("#recyclerTable tbody");
+    if (!tbody) return;
+
     tbody.innerHTML = "";
 
     let pending = 0;
@@ -34,10 +45,9 @@ function loadRequests() {
         let actionButton = "";
 
         if (waste.status === "Pending") {
-            actionButton = 
-            `<button onclick="acceptRequest(${index})">Accept</button>
-            <button onclick="denyRequest(${index})">Deny</button>`;
-
+            actionButton = `
+                <button onclick="acceptRequest(${index})">Accept</button>
+                <button onclick="denyRequest(${index})">Deny</button>`;
         } else if (waste.status === "Accepted") {
             actionButton = `<button onclick="completeRequest(${index})">Mark Completed</button>`;
         } else {
@@ -57,7 +67,6 @@ function loadRequests() {
                         ${waste.status}
                     </span>
                 </td>
-
                 <td>${actionButton}</td>
             </tr>
         `;
@@ -65,10 +74,15 @@ function loadRequests() {
         tbody.innerHTML += row;
     });
 
-    document.getElementById("totalRequests").innerText = wastes.length;
-    document.getElementById("pendingRequests").innerText = pending;
-    document.getElementById("acceptedRequests").innerText = accepted;
-    document.getElementById("completedRequests").innerText = completed;
+    const totalRequests = document.getElementById("totalRequests");
+    const pendingRequests = document.getElementById("pendingRequests");
+    const acceptedRequests = document.getElementById("acceptedRequests");
+    const completedRequests = document.getElementById("completedRequests");
+
+    if (totalRequests) totalRequests.innerText = wastes.length;
+    if (pendingRequests) pendingRequests.innerText = pending;
+    if (acceptedRequests) acceptedRequests.innerText = accepted;
+    if (completedRequests) completedRequests.innerText = completed;
 }
 
 function acceptRequest(index) {
@@ -87,7 +101,6 @@ function completeRequest(index) {
 
 function denyRequest(index) {
     let wastes = JSON.parse(localStorage.getItem("wastes")) || [];
-
     const reason = prompt("Enter reason for denial:");
 
     if (reason && reason.trim() !== "") {
@@ -101,3 +114,33 @@ function denyRequest(index) {
 }
 
 loadRequests();
+
+// ================= SAFE TAB TOGGLE =================
+const recycleTab = document.getElementById("recycleTab");
+const reuseTab = document.getElementById("reuseTab");
+
+if (recycleTab && reuseTab) {
+
+    const recyclingSection = document.getElementById("recyclingSection");
+    const reuseSection = document.getElementById("reuseSection");
+
+    recycleTab.addEventListener("click", () => {
+        if (recyclingSection && reuseSection) {
+            recyclingSection.style.display = "block";
+            reuseSection.style.display = "none";
+        }
+
+        recycleTab.classList.add("active-tab");
+        reuseTab.classList.remove("active-tab");
+    });
+
+    reuseTab.addEventListener("click", () => {
+        if (recyclingSection && reuseSection) {
+            recyclingSection.style.display = "none";
+            reuseSection.style.display = "block";
+        }
+
+        reuseTab.classList.add("active-tab");
+        recycleTab.classList.remove("active-tab");
+    });
+}

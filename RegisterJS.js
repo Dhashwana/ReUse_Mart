@@ -1,37 +1,101 @@
-document.getElementById("registerForm").addEventListener("submit", function(e) {
-    e.preventDefault();
+const loggedUser = JSON.parse(localStorage.getItem("loggedInUser"));
 
-    const name = document.getElementById("name").value;
-    const email = document.getElementById("email").value;
-    const password = document.getElementById("password").value;
-    const location = document.getElementById("location").value;
-    const role = document.getElementById("role").value;
+if (!loggedUser || loggedUser.role !== "recycler") {
+    window.location.href = "Login.html";
+}
 
-    let users = JSON.parse(localStorage.getItem("users")) || [];
+document.getElementById("welcomeRecycler").innerText =
+    "Welcome, " + loggedUser.name;
 
-    const existingUser = users.find(user => user.email === email);
-
-    if (existingUser) {
-        alert("User already exists with this email!");
-        return;
-    }
-
-    const newUser = {
-        name,
-        email,
-        password,
-        location,
-        role
-    };
-
-    users.push(newUser);
-    localStorage.setItem("users", JSON.stringify(users));
-
-    alert("Registration successful!");
-
-    if (role === "user") {
-        window.location.href = "UserDashboard.html";
-    } else {
-        window.location.href = "RecyclerDashboard.html";
-    }
+document.getElementById("logoutBtn").addEventListener("click", () => {
+    localStorage.removeItem("loggedInUser");
+    window.location.href = "index.html";
 });
+
+function loadRequests() {
+    const wastes = JSON.parse(localStorage.getItem("wastes")) || [];
+    const users = JSON.parse(localStorage.getItem("users")) || [];
+
+    const tbody = document.querySelector("#recyclerTable tbody");
+    tbody.innerHTML = "";
+
+    let pending = 0;
+    let accepted = 0;
+    let completed = 0;
+
+    wastes.forEach((waste, index) => {
+
+        const user = users.find(u => u.email === waste.userEmail);
+
+        if (waste.status === "Pending") pending++;
+        if (waste.status === "Accepted") accepted++;
+        if (waste.status === "Completed") completed++;
+
+        let actionButton = "";
+
+        if (waste.status === "Pending") {
+            actionButton = 
+            `<button onclick="acceptRequest(${index})">Accept</button>
+             <button onclick="denyRequest(${index})">Deny</button>`;
+        } else if (waste.status === "Accepted") {
+            actionButton = `<button onclick="completeRequest(${index})">Mark Completed</button>`;
+        } else {
+            actionButton = "Done";
+        }
+
+        const row = `
+            <tr>
+                <td>${user ? user.name : "Unknown"}</td>
+                <td>${waste.type}</td>
+                <td>${waste.quantity}</td>
+                <td>${waste.unit}</td>
+                <td>${waste.date}</td>
+                <td>${user ? user.location : "-"}</td>
+                <td>
+                    <span class="status status-${waste.status.toLowerCase()}">
+                        ${waste.status}
+                    </span>
+                </td>
+                <td>${actionButton}</td>
+            </tr>
+        `;
+
+        tbody.innerHTML += row;
+    });
+
+    document.getElementById("totalRequests").innerText = wastes.length;
+    document.getElementById("pendingRequests").innerText = pending;
+    document.getElementById("acceptedRequests").innerText = accepted;
+    document.getElementById("completedRequests").innerText = completed;
+}
+
+function acceptRequest(index) {
+    let wastes = JSON.parse(localStorage.getItem("wastes")) || [];
+    wastes[index].status = "Accepted";
+    localStorage.setItem("wastes", JSON.stringify(wastes));
+    loadRequests();
+}
+
+function completeRequest(index) {
+    let wastes = JSON.parse(localStorage.getItem("wastes")) || [];
+    wastes[index].status = "Completed";
+    localStorage.setItem("wastes", JSON.stringify(wastes));
+    loadRequests();
+}
+
+function denyRequest(index) {
+    let wastes = JSON.parse(localStorage.getItem("wastes")) || [];
+
+    const reason = prompt("Enter reason for denial:");
+
+    if (reason && reason.trim() !== "") {
+        wastes[index].status = "Denied";
+        wastes[index].denyReason = reason;
+        localStorage.setItem("wastes", JSON.stringify(wastes));
+        loadRequests();
+    } else {
+        alert("Denial reason is required.");
+    }
+}
+
+loadRequests();
