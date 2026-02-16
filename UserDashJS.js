@@ -1,21 +1,16 @@
-// ================= LOGIN CHECK =================
 const loggedUser = JSON.parse(localStorage.getItem("loggedInUser"));
 
 if (!loggedUser || loggedUser.role !== "user") {
     window.location.href = "Login.html";
 }
 
-// ================= WELCOME MESSAGE =================
-document.getElementById("welcomeUser").innerText =
-    "Welcome, " + loggedUser.name;
 
-// ================= LOGOUT =================
 document.getElementById("logoutBtn").addEventListener("click", () => {
     localStorage.removeItem("loggedInUser");
     window.location.href = "index.html";
 });
 
-// ================= MODAL =================
+
 const modal = document.getElementById("wasteModal");
 
 document.getElementById("openModal").addEventListener("click", () => {
@@ -26,7 +21,7 @@ document.getElementById("closeModal").addEventListener("click", () => {
     modal.style.display = "none";
 });
 
-// ================= ADD WASTE =================
+
 document.getElementById("wasteForm").addEventListener("submit", function(e) {
     e.preventDefault();
 
@@ -49,7 +44,6 @@ document.getElementById("wasteForm").addEventListener("submit", function(e) {
     loadWaste();
 });
 
-// ================= LOAD USER WASTE =================
 function loadWaste() {
     const wastes = JSON.parse(localStorage.getItem("wastes")) || [];
     const tbody = document.querySelector("#wasteTable tbody");

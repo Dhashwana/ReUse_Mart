@@ -2,6 +2,10 @@ body{
     font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
 }
 
+h3{
+    line-height: 25%;
+}
+
 /* Navbar */
 .navbar {
     display: flex;
@@ -14,35 +18,53 @@ body{
     color: white;
 }
 
+/* Center Toggle */
 .nav-center {
     display: flex;
-    gap: 15px;
+    align-items: center;
+    gap: 14px;
 }
 
-.nav-center button {
-    background: none;
-    border: none;
-    color: white;
-    font-size: 16px;
+.nav-link {
     cursor: pointer;
-    padding: 6px 12px;
+    padding: 6px 14px;
+    border-radius: 6px;
+    transition: 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    line-height: 1;
+}
+
+.nav-link:hover {
+    background: rgba(255,255,255,0.2);
+}
+
+.nav-link.active {
+    background: white;
+    color: #2e7d32;
+    font-weight: bold;
+}
+
+.divider {
+    opacity: 0.8;
+}
+
+/* Right Section */
+.nav-right {
+    display: flex;
+    align-items: center;
+    gap: 12px;
 }
 
 .nav-right button {
-    padding: 3px 7px;
+    padding: 4px 8px;
     border: none;
     border-radius: 6px;
     background: white;
     color: #1b5e20;
     cursor: pointer;
     font-weight: 500;
-}
-
-.active-tab {
-    background: white;
-    color: #2e7d32;
-    border-radius: 6px;
-    font-weight: bold;
 }
 
 .nav-right button:hover {

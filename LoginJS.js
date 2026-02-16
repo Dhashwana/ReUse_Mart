@@ -11,14 +11,18 @@ document.getElementById("loginForm").addEventListener("submit", function(e) {
     );
 
     if (validUser) {
+
+        // Store entire logged-in user object
         localStorage.setItem("loggedInUser", JSON.stringify(validUser));
+
+        // Redirect based on role
         if (validUser.role === "user") {
             window.location.href = "UserDashboard.html";
         } else {
             window.location.href = "RecyclerDashboard.html";
         }
+
     } else {
         alert("Invalid email or password!");
     }
-
 });

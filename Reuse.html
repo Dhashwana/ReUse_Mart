@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Reuse Marketplace - ReUse Mart</title>
+
+    <!-- IMPORTANT: Use Dashboard CSS for consistent navbar -->
+    <link rel="stylesheet" href="UserDashStyle.css">
+    <link rel="stylesheet" href="ReuseStyle.css">
+</head>
+<body>
+
+<!-- Navbar -->
+<nav class="navbar">
+    <div class="nav-left">
+        ReUse Mart
+    </div>
+
+    <div class="nav-center">
+        <span class="nav-link" onclick="goToRecycle()">♻️ Recycle</span>
+        <span class="divider">|</span>
+        <span class="nav-link active">🔁 Reuse</span>
+    </div>
+
+    <div class="nav-right">
+        <span id="welcomeReuse">Welcome</span>
+        <button id="logoutBtn">Logout</button>
+    </div>
+</nav>
+
+<!-- Main Content -->
+<div class="container">
+
+    <div class="top-section">
+        <h2>Reuse Marketplace</h2>
+        <button class="add-btn">+ Post Item</button>
+    </div>
+
+    <!-- Cards Grid -->
+    <div class="card-grid"></div>
+
+    <!-- Post Item Modal -->
+    <div class="modal" id="reuseModal">
+        <div class="modal-content">
+            <span class="close-btn" id="closeReuseModal">&times;</span>
+            <h2>Post Reuse Item</h2>
+
+            <form id="reuseForm">
+                <input type="text" id="itemTitle" placeholder="Item Title" required>
+
+                <select id="itemCategory" required>
+                    <option value="">Select Category</option>
+                    <option>Books</option>
+                    <option>Clothes</option>
+                    <option>Electronics</option>
+                    <option>Furniture</option>
+                    <option>Toys</option>
+                    <option>Appliances</option>
+                    <option>Other</option>
+                </select>
+
+                <select id="itemCondition" required>
+                    <option value="">Select Condition</option>
+                    <option>New</option>
+                    <option>Slightly Used</option>
+                    <option>Repairable</option>
+                </select>
+
+                <input type="text" id="itemLocation" placeholder="Location" required>
+
+                <input type="number" id="itemPrice" placeholder="Price (0 for Free)" required>
+
+                <button type="submit">Post Item</button>
+            </form>
+        </div>
+    </div>
+
+</div>
+
+<!-- SESSION + NAVIGATION SCRIPT -->
+<script>
+
+const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
+
+// Protect page
+if (!loggedInUser) {
+    window.location.href = "Login.html";
+}
+
+// Show username
+document.getElementById("welcomeReuse").innerText =
+    "Welcome, " + loggedInUser.name;
+
+// Logout
+document.getElementById("logoutBtn").addEventListener("click", function () {
+    localStorage.removeItem("loggedInUser");
+    window.location.href = "Login.html";
+});
+
+// Smart redirect based on role
+function goToRecycle() {
+    if (loggedInUser.role === "recycler") {
+        window.location.href = "RecyclerDashboard.html";
+    } else {
+        window.location.href = "UserDashboard.html";
+    }
+}
+
+</script>
+
+<script src="ReuseJS.js"></script>
+</body>
+</html>

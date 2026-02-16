@@ -12,6 +12,12 @@
         ReUse Mart
     </div>
 
+    <div class="nav-center">
+        <span class="nav-link active">♻️ Recycle</span>
+        <span class="divider">|</span>
+        <span class="nav-link" onclick="goToReuse()">🔁 Reuse</span>
+    </div>
+
     <div class="nav-right">
         <span id="welcomeUser">Welcome</span>
         <button id="logoutBtn">Logout</button>
@@ -20,6 +26,7 @@
 
 <!-- Dashboard Content -->
 <div class="dashboard">
+    <h2>Recycle Dashboard</h2>
 
     <!-- Overview Cards -->
     <div class="cards">
@@ -51,10 +58,8 @@
                 <th>Status</th>
             </tr>
         </thead>
-        <tbody>
-        </tbody>
+        <tbody></tbody>
     </table>
-
 </div>
 
 <!-- Popup Modal -->
@@ -94,6 +99,33 @@
         </form>
     </div>
 </div>
+
+<!-- SESSION + NAVIGATION SCRIPT -->
+<script>
+
+// Check if user is logged in
+const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
+
+if (!loggedInUser || loggedInUser.role !== "user") {
+    window.location.href = "Login.html";
+}
+
+// Show username
+document.getElementById("welcomeUser").innerText =
+    "Welcome, " + loggedInUser.name;
+
+// Logout
+document.getElementById("logoutBtn").addEventListener("click", function () {
+    localStorage.removeItem("loggedInUser");
+    window.location.href = "Login.html";
+});
+
+// Navigate to Reuse page
+function goToReuse() {
+    window.location.href = "Reuse.html";
+}
+
+</script>
 
 <script src="UserDashJS.js"></script>
 </body>
