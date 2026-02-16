@@ -208,3 +208,38 @@ th, td {
 .reuse-form button:hover {
     background: #1b5e20;
 }
+
+/* Tablet */
+@media (max-width: 1024px) {
+    .cards {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .nav-center {
+        gap: 8px;
+        font-size: 14px;
+    }
+}
+
+/* Mobile */
+@media (max-width: 600px) {
+
+    .navbar {
+        flex-direction: column;
+        gap: 10px;
+        text-align: center;
+    }
+
+    .cards {
+        grid-template-columns: 1fr;
+    }
+
+    table {
+        font-size: 12px;
+    }
+
+    .nav-link {
+        padding: 4px 8px;
+        font-size: 14px;
+    }
+}

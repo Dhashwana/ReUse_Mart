@@ -216,3 +216,21 @@ body {
     border-radius: 6px;
     font-size: 14px;
 }
+
+@media (max-width: 1024px) {
+    .card-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 600px) {
+    .card-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .top-section {
+        flex-direction: column;
+        gap: 10px;
+        align-items: stretch;
+    }
+}
