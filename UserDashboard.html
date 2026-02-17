@@ -7,7 +7,6 @@
 </head>
 <body>
 
-<!-- Navbar -->
 <nav class="navbar">
     <div class="nav-left">
         ReUse Mart
@@ -25,11 +24,9 @@
     </div>
 </nav>
 
-<!-- Dashboard Content -->
 <div class="dashboard">
     <h2>Recycle Dashboard</h2>
 
-    <!-- Overview Cards -->
     <div class="cards">
         <div class="card">
             <h3 id="totalWaste">0</h3>
@@ -45,10 +42,8 @@
         </div>
     </div>
 
-    <!-- Add Waste Button -->
     <button class="add-btn" id="openModal">+ Add Waste</button>
 
-    <!-- Waste Requests Table -->
     <table id="wasteTable">
         <thead>
             <tr>
@@ -57,13 +52,13 @@
                 <th>Unit</th>
                 <th>Date</th>
                 <th>Status</th>
+                <th>Action</th>
             </tr>
         </thead>
         <tbody></tbody>
     </table>
 </div>
 
-<!-- Popup Modal -->
 <div class="modal" id="wasteModal">
     <div class="modal-content">
         <span class="close-btn" id="closeModal">&times;</span>
@@ -101,31 +96,24 @@
     </div>
 </div>
 
-<!-- SESSION + NAVIGATION SCRIPT -->
 <script>
-
-// Check if user is logged in
 const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
 
 if (!loggedInUser || loggedInUser.role !== "user") {
     window.location.href = "Login.html";
 }
 
-// Show username
 document.getElementById("welcomeUser").innerText =
     "Welcome, " + loggedInUser.name;
 
-// Logout
 document.getElementById("logoutBtn").addEventListener("click", function () {
     localStorage.removeItem("loggedInUser");
     window.location.href = "Login.html";
 });
 
-// Navigate to Reuse page
 function goToReuse() {
     window.location.href = "Reuse.html";
 }
-
 </script>
 
 <script src="UserDashJS.js"></script>

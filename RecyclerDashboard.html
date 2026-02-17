@@ -7,7 +7,6 @@
 </head>
 <body>
 
-<!-- Navbar -->
 <nav class="navbar">
     <div class="nav-left">
         ReUse Mart
@@ -29,7 +28,6 @@
 
     <h2>Recycler Dashboard</h2>
 
-    <!-- Overview Cards -->
     <div class="cards">
         <div class="card">
             <h3 id="totalRequests">0</h3>
@@ -49,7 +47,6 @@
         </div>
     </div>
 
-    <!-- Requests Table -->
     <table id="recyclerTable">
         <thead>
             <tr>
@@ -59,6 +56,7 @@
                 <th>Unit</th>
                 <th>Date</th>
                 <th>Location</th>
+                <th>Distance (km)</th>
                 <th>Status</th>
                 <th>Action</th>
             </tr>
@@ -68,31 +66,24 @@
 
 </div>
 
-<!-- SESSION + NAVIGATION SCRIPT -->
 <script>
-
-// Check session
 const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
 
 if (!loggedInUser || loggedInUser.role !== "recycler") {
     window.location.href = "Login.html";
 }
 
-// Show recycler name
 document.getElementById("welcomeRecycler").innerText =
     "Welcome, " + loggedInUser.name;
 
-// Logout
 document.getElementById("logoutBtn").addEventListener("click", function () {
     localStorage.removeItem("loggedInUser");
     window.location.href = "Login.html";
 });
 
-// Navigate to Reuse
 function goToReuse() {
     window.location.href = "Reuse.html";
 }
-
 </script>
 
 <script src="RecycleDashJS.js"></script>

@@ -60,3 +60,31 @@ body{
 .logo{
     height: 60px;
 }
+
+.checkbox-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+    margin-top: 8px;
+}
+
+.check-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: #e8f5e9;
+    padding: 6px 10px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.2s ease;
+    font-size: 14px;
+}
+
+.check-item:hover {
+    background: #c8e6c9;
+}
+
+.check-item input {
+    accent-color: #2e7d32;
+    cursor: pointer;
+}

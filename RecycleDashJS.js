@@ -1,17 +1,14 @@
-// ================= LOGIN CHECK =================
 const loggedUser = JSON.parse(localStorage.getItem("loggedInUser"));
 
 if (!loggedUser || loggedUser.role !== "recycler") {
     window.location.href = "Login.html";
 }
 
-// ================= WELCOME =================
 const welcomeRecycler = document.getElementById("welcomeRecycler");
 if (welcomeRecycler) {
     welcomeRecycler.innerText = "Welcome, " + loggedUser.name;
 }
 
-// ================= LOGOUT =================
 const logoutBtn = document.getElementById("logoutBtn");
 if (logoutBtn) {
     logoutBtn.addEventListener("click", () => {
@@ -20,12 +17,27 @@ if (logoutBtn) {
     });
 }
 
-// ================= LOAD REQUESTS =================
+function calculateDistance(lat1, lon1, lat2, lon2) {
+    const R = 6371;
+    const dLat = (lat2 - lat1) * Math.PI / 180;
+    const dLon = (lon2 - lon1) * Math.PI / 180;
+
+    const a =
+        Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+        Math.cos(lat1 * Math.PI / 180) *
+        Math.cos(lat2 * Math.PI / 180) *
+        Math.sin(dLon / 2) *
+        Math.sin(dLon / 2);
+
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    return R * c;
+}
+
 function loadRequests() {
     const wastes = JSON.parse(localStorage.getItem("wastes")) || [];
     const users = JSON.parse(localStorage.getItem("users")) || [];
-
     const tbody = document.querySelector("#recyclerTable tbody");
+
     if (!tbody) return;
 
     tbody.innerHTML = "";
@@ -34,9 +46,31 @@ function loadRequests() {
     let accepted = 0;
     let completed = 0;
 
-    wastes.forEach((waste, index) => {
+    const filteredWastes = wastes.filter(waste => {
+        if (!loggedUser.recycleTypes.includes(waste.type)) return false;
+
+        const distance = calculateDistance(
+            loggedUser.latitude,
+            loggedUser.longitude,
+            waste.userLatitude,
+            waste.userLongitude
+        );
+
+        return distance <= 5;
+    });
+
+    filteredWastes.forEach(waste => {
 
         const user = users.find(u => u.email === waste.userEmail);
+
+        const distance = calculateDistance(
+            loggedUser.latitude,
+            loggedUser.longitude,
+            waste.userLatitude,
+            waste.userLongitude
+        );
+
+        const roundedDistance = distance.toFixed(2);
 
         if (waste.status === "Pending") pending++;
         if (waste.status === "Accepted") accepted++;
@@ -46,10 +80,10 @@ function loadRequests() {
 
         if (waste.status === "Pending") {
             actionButton = `
-                <button onclick="acceptRequest(${index})">Accept</button>
-                <button onclick="denyRequest(${index})">Deny</button>`;
+                <button onclick="acceptRequest(${waste.id})">Accept</button>
+                <button onclick="denyRequest(${waste.id})">Deny</button>`;
         } else if (waste.status === "Accepted") {
-            actionButton = `<button onclick="completeRequest(${index})">Mark Completed</button>`;
+            actionButton = `<button onclick="completeRequest(${waste.id})">Mark Completed</button>`;
         } else {
             actionButton = "Done";
         }
@@ -62,6 +96,7 @@ function loadRequests() {
                 <td>${waste.unit}</td>
                 <td>${waste.date}</td>
                 <td>${user ? user.location : "-"}</td>
+                <td>${roundedDistance}</td>
                 <td>
                     <span class="status status-${waste.status.toLowerCase()}">
                         ${waste.status}
@@ -74,38 +109,44 @@ function loadRequests() {
         tbody.innerHTML += row;
     });
 
-    const totalRequests = document.getElementById("totalRequests");
-    const pendingRequests = document.getElementById("pendingRequests");
-    const acceptedRequests = document.getElementById("acceptedRequests");
-    const completedRequests = document.getElementById("completedRequests");
-
-    if (totalRequests) totalRequests.innerText = wastes.length;
-    if (pendingRequests) pendingRequests.innerText = pending;
-    if (acceptedRequests) acceptedRequests.innerText = accepted;
-    if (completedRequests) completedRequests.innerText = completed;
+    document.getElementById("totalRequests").innerText = filteredWastes.length;
+    document.getElementById("pendingRequests").innerText = pending;
+    document.getElementById("acceptedRequests").innerText = accepted;
+    document.getElementById("completedRequests").innerText = completed;
 }
 
-function acceptRequest(index) {
+function acceptRequest(id) {
     let wastes = JSON.parse(localStorage.getItem("wastes")) || [];
-    wastes[index].status = "Accepted";
+    wastes = wastes.map(w => {
+        if (w.id === id) w.status = "Accepted";
+        return w;
+    });
     localStorage.setItem("wastes", JSON.stringify(wastes));
     loadRequests();
 }
 
-function completeRequest(index) {
+function completeRequest(id) {
     let wastes = JSON.parse(localStorage.getItem("wastes")) || [];
-    wastes[index].status = "Completed";
+    wastes = wastes.map(w => {
+        if (w.id === id) w.status = "Completed";
+        return w;
+    });
     localStorage.setItem("wastes", JSON.stringify(wastes));
     loadRequests();
 }
 
-function denyRequest(index) {
+function denyRequest(id) {
     let wastes = JSON.parse(localStorage.getItem("wastes")) || [];
     const reason = prompt("Enter reason for denial:");
 
     if (reason && reason.trim() !== "") {
-        wastes[index].status = "Denied";
-        wastes[index].denyReason = reason;
+        wastes = wastes.map(w => {
+            if (w.id === id) {
+                w.status = "Denied";
+                w.denyReason = reason;
+            }
+            return w;
+        });
         localStorage.setItem("wastes", JSON.stringify(wastes));
         loadRequests();
     } else {
@@ -114,33 +155,3 @@ function denyRequest(index) {
 }
 
 loadRequests();
-
-// ================= SAFE TAB TOGGLE =================
-const recycleTab = document.getElementById("recycleTab");
-const reuseTab = document.getElementById("reuseTab");
-
-if (recycleTab && reuseTab) {
-
-    const recyclingSection = document.getElementById("recyclingSection");
-    const reuseSection = document.getElementById("reuseSection");
-
-    recycleTab.addEventListener("click", () => {
-        if (recyclingSection && reuseSection) {
-            recyclingSection.style.display = "block";
-            reuseSection.style.display = "none";
-        }
-
-        recycleTab.classList.add("active-tab");
-        reuseTab.classList.remove("active-tab");
-    });
-
-    reuseTab.addEventListener("click", () => {
-        if (recyclingSection && reuseSection) {
-            recyclingSection.style.display = "none";
-            reuseSection.style.display = "block";
-        }
-
-        reuseTab.classList.add("active-tab");
-        recycleTab.classList.remove("active-tab");
-    });
-}
