@@ -1,28 +1,41 @@
-document.getElementById("loginForm").addEventListener("submit", function(e) {
+import { db } from "./firebase.js";
+import { collection, query, where, getDocs } 
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+document.getElementById("loginForm").addEventListener("submit", async function(e) {
     e.preventDefault();
 
-    const email = document.getElementById("email").value;
-    const password = document.getElementById("password").value;
+    const email = document.getElementById("email").value.trim();
+    const password = document.getElementById("password").value.trim();
 
-    const users = JSON.parse(localStorage.getItem("users")) || [];
+    const usersRef = collection(db, "users");
+    const q = query(usersRef, where("email", "==", email));
+    const querySnapshot = await getDocs(q);
 
-    const validUser = users.find(user => 
-        user.email === email && user.password === password
-    );
-
-    if (validUser) {
-
-        // Store entire logged-in user object
-        localStorage.setItem("loggedInUser", JSON.stringify(validUser));
-
-        // Redirect based on role
-        if (validUser.role === "user") {
-            window.location.href = "UserDashboard.html";
-        } else {
-            window.location.href = "RecyclerDashboard.html";
-        }
-
-    } else {
+    if (querySnapshot.empty) {
         alert("Invalid email or password!");
+        return;
+    }
+
+    let validUser = null;
+
+    querySnapshot.forEach(doc => {
+        const userData = doc.data();
+        if (userData.password === password) {
+            validUser = userData;
+        }
+    });
+
+    if (!validUser) {
+        alert("Invalid email or password!");
+        return;
+    }
+
+    localStorage.setItem("loggedInUser", JSON.stringify(validUser));
+
+    if (validUser.role === "user") {
+        window.location.href = "UserDashboard.html";
+    } else {
+        window.location.href = "RecyclerDashboard.html";
     }
 });

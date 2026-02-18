@@ -1,3 +1,14 @@
+import { db } from "./firebase.js";
+import {
+    collection,
+    addDoc,
+    getDocs,
+    query,
+    where,
+    deleteDoc,
+    doc
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
 const loggedUser = JSON.parse(localStorage.getItem("loggedInUser"));
 
 if (!loggedUser || loggedUser.role !== "user") {
@@ -19,11 +30,10 @@ document.getElementById("closeModal").addEventListener("click", () => {
     modal.style.display = "none";
 });
 
-document.getElementById("wasteForm").addEventListener("submit", function(e) {
+document.getElementById("wasteForm").addEventListener("submit", async function (e) {
     e.preventDefault();
 
     const waste = {
-        id: Date.now(),
         userEmail: loggedUser.email,
         type: document.getElementById("wasteType").value,
         quantity: document.getElementById("quantity").value,
@@ -35,34 +45,35 @@ document.getElementById("wasteForm").addEventListener("submit", function(e) {
         userLongitude: loggedUser.longitude
     };
 
-    let wastes = JSON.parse(localStorage.getItem("wastes")) || [];
-    wastes.push(waste);
-    localStorage.setItem("wastes", JSON.stringify(wastes));
+    await addDoc(collection(db, "wastes"), waste);
 
     modal.style.display = "none";
     this.reset();
     loadWaste();
 });
 
-function deleteWaste(id) {
-    let wastes = JSON.parse(localStorage.getItem("wastes")) || [];
-    wastes = wastes.filter(w => w.id !== id);
-    localStorage.setItem("wastes", JSON.stringify(wastes));
+async function deleteWaste(id) {
+    await deleteDoc(doc(db, "wastes", id));
     loadWaste();
 }
 
-function loadWaste() {
-    const wastes = JSON.parse(localStorage.getItem("wastes")) || [];
+async function loadWaste() {
+    const q = query(
+        collection(db, "wastes"),
+        where("userEmail", "==", loggedUser.email)
+    );
+
+    const querySnapshot = await getDocs(q);
+
     const tbody = document.querySelector("#wasteTable tbody");
-
     tbody.innerHTML = "";
-
-    const userWastes = wastes.filter(w => w.userEmail === loggedUser.email);
 
     let pending = 0;
     let completed = 0;
 
-    userWastes.forEach(w => {
+    querySnapshot.forEach((docSnap) => {
+        const w = docSnap.data();
+        const id = docSnap.id;
 
         if (w.status === "Pending") pending++;
         if (w.status === "Completed") completed++;
@@ -70,31 +81,35 @@ function loadWaste() {
         let actionButton = "";
 
         if (w.status === "Pending") {
-            actionButton = `<button class="action-btn delete-btn" onclick="deleteWaste(${w.id})">Delete</button>`;
+            actionButton = `<button class="action-btn delete-btn" onclick="deleteWaste('${id}')">Delete</button>`;
         } else {
             actionButton = "-";
         }
 
-        const row = `<tr>
-            <td>${w.type}</td>
-            <td>${w.quantity}</td>
-            <td>${w.unit}</td>
-            <td>${w.date}</td>
-            <td>
-                <span class="status status-${w.status.toLowerCase()}">
-                    ${w.status}
-                </span>
-                ${w.status === "Denied" ? `<br><small>Reason: ${w.denyReason}</small>` : ""}
-            </td>
-            <td>${actionButton}</td>
-        </tr>`;
+        const row = `
+            <tr>
+                <td>${w.type}</td>
+                <td>${w.quantity}</td>
+                <td>${w.unit}</td>
+                <td>${w.date}</td>
+                <td>
+                    <span class="status status-${w.status.toLowerCase()}">
+                        ${w.status}
+                    </span>
+                    ${w.status === "Denied" ? `<br><small>Reason: ${w.denyReason}</small>` : ""}
+                </td>
+                <td>${actionButton}</td>
+            </tr>
+        `;
 
         tbody.innerHTML += row;
     });
 
-    document.getElementById("totalWaste").innerText = userWastes.length;
+    document.getElementById("totalWaste").innerText = querySnapshot.size;
     document.getElementById("pendingWaste").innerText = pending;
     document.getElementById("completedWaste").innerText = completed;
 }
+
+window.deleteWaste = deleteWaste;
 
 loadWaste();

@@ -1,3 +1,7 @@
+import { db } from "./firebase.js";
+import { collection, addDoc, query, where, getDocs } 
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
 document.addEventListener("DOMContentLoaded", function () {
 
     const roleSelect = document.getElementById("role");
@@ -12,7 +16,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     });
 
-    form.addEventListener("submit", function (e) {
+    form.addEventListener("submit", async function (e) {
         e.preventDefault();
 
         const name = document.getElementById("name").value.trim();
@@ -21,10 +25,12 @@ document.addEventListener("DOMContentLoaded", function () {
         const location = document.getElementById("location").value.trim();
         const role = document.getElementById("role").value;
 
-        let users = JSON.parse(localStorage.getItem("users")) || [];
+        const usersRef = collection(db, "users");
 
-        const existingUser = users.find(user => user.email === email);
-        if (existingUser) {
+        const q = query(usersRef, where("email", "==", email));
+        const querySnapshot = await getDocs(q);
+
+        if (!querySnapshot.empty) {
             alert("User already exists with this email!");
             return;
         }
@@ -33,6 +39,7 @@ document.addEventListener("DOMContentLoaded", function () {
         if (role === "recycler") {
             const checkboxes = document.querySelectorAll("#recycleTypes input[type='checkbox']:checked");
             recycleTypes = Array.from(checkboxes).map(cb => cb.value);
+
             if (recycleTypes.length === 0) {
                 alert("Please select at least one material you recycle.");
                 return;
@@ -44,7 +51,7 @@ document.addEventListener("DOMContentLoaded", function () {
             return;
         }
 
-        navigator.geolocation.getCurrentPosition(function (position) {
+        navigator.geolocation.getCurrentPosition(async function (position) {
 
             const latitude = position.coords.latitude;
             const longitude = position.coords.longitude;
@@ -60,8 +67,8 @@ document.addEventListener("DOMContentLoaded", function () {
                 longitude
             };
 
-            users.push(newUser);
-            localStorage.setItem("users", JSON.stringify(users));
+            await addDoc(usersRef, newUser);
+
             localStorage.setItem("loggedInUser", JSON.stringify(newUser));
 
             alert("Registration successful!");
