@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Register - Community Recycling Marketplace</title>
     <link rel="stylesheet" href="LoginStyle.css">
 </head>
@@ -17,6 +18,9 @@
         <input type="text" id="name" placeholder="Full Name" required>
         <input type="email" id="email" placeholder="Email" required>
         <input type="password" id="password" placeholder="Password" required>
+
+        <input type="tel" id="phone" placeholder="Phone Number" pattern="[0-9]{10}" required>
+
         <input type="text" id="location" placeholder="Location (Area)" required>
 
         <label>Select Role:</label>
@@ -29,43 +33,16 @@
         <div id="recyclerOptions" style="display:none; margin-top:10px;">
             <label>Select Materials You Recycle:</label>
             <div id="recycleTypes" class="checkbox-grid">
-                <label class="check-item">
-                    <input type="checkbox" value="Plastic">
-                    <span>Plastic</span>
-                </label>
-                <label class="check-item">
-                    <input type="checkbox" value="Paper">
-                    <span>Paper</span>
-                </label>
-                <label class="check-item">
-                    <input type="checkbox" value="Glass">
-                    <span>Glass</span>
-                </label>
-                <label class="check-item">
-                    <input type="checkbox" value="Metal">
-                    <span>Metal</span>
-                </label>
-                <label class="check-item">
-                    <input type="checkbox" value="E-Waste">
-                    <span>E-Waste</span>
-                </label>
-                <label class="check-item">
-                    <input type="checkbox" value="Clothes">
-                    <span>Clothes</span>
-                </label>
-                <label class="check-item">
-                    <input type="checkbox" value="Cardboard">
-                    <span>Cardboard</span>
-                </label>
-                <label class="check-item">
-                    <input type="checkbox" value="Other">
-                    <span>Other</span>
-                </label>
+                <label class="check-item"><input type="checkbox" value="Plastic"><span>Plastic</span></label>
+                <label class="check-item"><input type="checkbox" value="Paper"><span>Paper</span></label>
+                <label class="check-item"><input type="checkbox" value="Glass"><span>Glass</span></label>
+                <label class="check-item"><input type="checkbox" value="Metal"><span>Metal</span></label>
+                <label class="check-item"><input type="checkbox" value="E-Waste"><span>E-Waste</span></label>
+                <label class="check-item"><input type="checkbox" value="Clothes"><span>Clothes</span></label>
+                <label class="check-item"><input type="checkbox" value="Cardboard"><span>Cardboard</span></label>
+                <label class="check-item"><input type="checkbox" value="Other"><span>Other</span></label>
             </div>
         </div>
-
-        <input type="hidden" id="latitude">
-        <input type="hidden" id="longitude">
 
         <button type="submit">Register</button>
     </form>
@@ -75,6 +52,6 @@
     </p>
 </div>
 
-<script type ="module" src="RegisterJS.js"></script>
+<script type="module" src="RegisterJS.js"></script>
 </body>
 </html>

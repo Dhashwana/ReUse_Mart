@@ -21,6 +21,7 @@ document.getElementById("logoutBtn").addEventListener("click", () => {
 });
 
 const modal = document.getElementById("wasteModal");
+const cardGrid = document.getElementById("wasteCardGrid");
 
 document.getElementById("openModal").addEventListener("click", () => {
     modal.style.display = "flex";
@@ -65,8 +66,7 @@ async function loadWaste() {
 
     const querySnapshot = await getDocs(q);
 
-    const tbody = document.querySelector("#wasteTable tbody");
-    tbody.innerHTML = "";
+    cardGrid.innerHTML = "";
 
     let pending = 0;
     let completed = 0;
@@ -78,31 +78,37 @@ async function loadWaste() {
         if (w.status === "Pending") pending++;
         if (w.status === "Completed") completed++;
 
-        let actionButton = "";
+        let actions = "";
 
         if (w.status === "Pending") {
-            actionButton = `<button class="action-btn delete-btn" onclick="deleteWaste('${id}')">Delete</button>`;
-        } else {
-            actionButton = "-";
+            actions = `
+                <div class="actions">
+                    <button class="action-btn delete-btn" onclick="deleteWaste('${id}')">Delete</button>
+                </div>`;
+        } 
+        else if (w.status === "Accepted") {
+            actions = `
+                <div class="actions">
+                    <div><strong>Recycler Phone:</strong> ${w.recyclerPhone || "-"}</div>
+                </div>`;
         }
 
-        const row = `
-            <tr>
-                <td>${w.type}</td>
-                <td>${w.quantity}</td>
-                <td>${w.unit}</td>
-                <td>${w.date}</td>
-                <td>
+        const card = `
+            <div class="request-card">
+                <h4>${w.type}</h4>
+                <p><strong>Quantity:</strong> ${w.quantity} ${w.unit}</p>
+                <p><strong>Date:</strong> ${w.date}</p>
+                <p>
                     <span class="status status-${w.status.toLowerCase()}">
                         ${w.status}
                     </span>
-                    ${w.status === "Denied" ? `<br><small>Reason: ${w.denyReason}</small>` : ""}
-                </td>
-                <td>${actionButton}</td>
-            </tr>
+                </p>
+                ${w.status === "Denied" ? `<p><strong>Reason:</strong> ${w.denyReason}</p>` : ""}
+                ${actions}
+            </div>
         `;
 
-        tbody.innerHTML += row;
+        cardGrid.innerHTML += card;
     });
 
     document.getElementById("totalWaste").innerText = querySnapshot.size;

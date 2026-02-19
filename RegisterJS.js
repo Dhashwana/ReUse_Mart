@@ -9,11 +9,8 @@ document.addEventListener("DOMContentLoaded", function () {
     const form = document.getElementById("registerForm");
 
     roleSelect.addEventListener("change", function () {
-        if (this.value === "recycler") {
-            recyclerOptions.style.display = "block";
-        } else {
-            recyclerOptions.style.display = "none";
-        }
+        recyclerOptions.style.display =
+            this.value === "recycler" ? "block" : "none";
     });
 
     form.addEventListener("submit", async function (e) {
@@ -22,8 +19,14 @@ document.addEventListener("DOMContentLoaded", function () {
         const name = document.getElementById("name").value.trim();
         const email = document.getElementById("email").value.trim();
         const password = document.getElementById("password").value.trim();
+        const phone = document.getElementById("phone").value.trim();
         const location = document.getElementById("location").value.trim();
         const role = document.getElementById("role").value;
+
+        if (!/^[0-9]{10}$/.test(phone)) {
+            alert("Enter a valid 10-digit phone number.");
+            return;
+        }
 
         const usersRef = collection(db, "users");
 
@@ -37,7 +40,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
         let recycleTypes = [];
         if (role === "recycler") {
-            const checkboxes = document.querySelectorAll("#recycleTypes input[type='checkbox']:checked");
+            const checkboxes =
+                document.querySelectorAll("#recycleTypes input[type='checkbox']:checked");
+
             recycleTypes = Array.from(checkboxes).map(cb => cb.value);
 
             if (recycleTypes.length === 0) {
@@ -60,6 +65,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 name,
                 email,
                 password,
+                phone,
                 location,
                 role,
                 recycleTypes: role === "recycler" ? recycleTypes : [],
@@ -73,16 +79,14 @@ document.addEventListener("DOMContentLoaded", function () {
 
             alert("Registration successful!");
 
-            if (role === "user") {
-                window.location.href = "UserDashboard.html";
-            } else {
-                window.location.href = "RecyclerDashboard.html";
-            }
+            window.location.href =
+                role === "user"
+                    ? "UserDashboard.html"
+                    : "RecyclerDashboard.html";
 
         }, function () {
             alert("Location access is required for registration.");
         });
-
     });
 
 });

@@ -12,15 +12,12 @@ if (!loggedUser || loggedUser.role !== "recycler") {
     window.location.href = "Login.html";
 }
 
-const welcomeRecycler = document.getElementById("welcomeRecycler");
-if (welcomeRecycler) {
-    welcomeRecycler.innerText = "Welcome, " + loggedUser.name;
-}
-
 document.getElementById("logoutBtn").addEventListener("click", () => {
     localStorage.removeItem("loggedInUser");
     window.location.href = "index.html";
 });
+
+const cardGrid = document.getElementById("recyclerCardGrid");
 
 function calculateDistance(lat1, lon1, lat2, lon2) {
     const R = 6371;
@@ -46,8 +43,7 @@ async function loadRequests() {
     const wastes = wastesSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
     const users = usersSnapshot.docs.map(doc => doc.data());
 
-    const tbody = document.querySelector("#recyclerTable tbody");
-    tbody.innerHTML = "";
+    cardGrid.innerHTML = "";
 
     let pending = 0;
     let accepted = 0;
@@ -76,46 +72,46 @@ async function loadRequests() {
             loggedUser.longitude,
             waste.userLatitude,
             waste.userLongitude
-        );
-
-        const roundedDistance = distance.toFixed(2);
+        ).toFixed(2);
 
         if (waste.status === "Pending") pending++;
         if (waste.status === "Accepted") accepted++;
         if (waste.status === "Completed") completed++;
 
-        let actionButton = "";
+        let actions = "";
 
         if (waste.status === "Pending") {
-            actionButton = `
-                <button class="action-btn accept-btn" onclick="acceptRequest('${waste.id}')">Accept</button>
-                <button class="action-btn deny-btn" onclick="denyRequest('${waste.id}')">Deny</button>`;
-        } else if (waste.status === "Accepted") {
-            actionButton = `
-                <button class="action-btn complete-btn" onclick="completeRequest('${waste.id}')">Complete</button>`;
-        } else {
-            actionButton = "Done";
+            actions = `
+                <div class="actions">
+                    <button class="action-btn accept-btn" onclick="acceptRequest('${waste.id}')">Accept</button>
+                    <button class="action-btn deny-btn" onclick="denyRequest('${waste.id}')">Deny</button>
+                </div>`;
+        } 
+        else if (waste.status === "Accepted") {
+            actions = `
+                <div class="actions">
+                    <div><strong>User Phone:</strong> ${user ? user.phone : "-"}</div>
+                    <button class="action-btn complete-btn" onclick="completeRequest('${waste.id}')">Complete</button>
+                </div>`;
         }
 
-        const row = `
-            <tr>
-                <td>${user ? user.name : "Unknown"}</td>
-                <td>${waste.type}</td>
-                <td>${waste.quantity}</td>
-                <td>${waste.unit}</td>
-                <td>${waste.date}</td>
-                <td>${user ? user.location : "-"}</td>
-                <td>${roundedDistance}</td>
-                <td>
+        const card = `
+            <div class="request-card">
+                <h4>${waste.type}</h4>
+                <p><strong>User:</strong> ${user ? user.name : "Unknown"}</p>
+                <p><strong>Quantity:</strong> ${waste.quantity} ${waste.unit}</p>
+                <p><strong>Date:</strong> ${waste.date}</p>
+                <p><strong>Distance:</strong> ${distance} km</p>
+                <p>
                     <span class="status status-${waste.status.toLowerCase()}">
                         ${waste.status}
                     </span>
-                </td>
-                <td>${actionButton}</td>
-            </tr>
+                </p>
+                ${actions}
+            </div>
         `;
 
-        tbody.innerHTML += row;
+        cardGrid.innerHTML += card;
     });
 
     document.getElementById("totalRequests").innerText = filteredWastes.length;
@@ -126,7 +122,9 @@ async function loadRequests() {
 
 async function acceptRequest(id) {
     await updateDoc(doc(db, "wastes", id), {
-        status: "Accepted"
+        status: "Accepted",
+        recyclerEmail: loggedUser.email,
+        recyclerPhone: loggedUser.phone
     });
     loadRequests();
 }
