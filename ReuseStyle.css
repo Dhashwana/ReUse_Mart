@@ -183,34 +183,78 @@ body {
     font-size: 20px;
 }
 
-.delete-btn {
-    background: #d32f2f;
-    color: white;
+.delete-btn,
+.claim-btn,
+.approve-btn,
+.reject-btn {
     border: none;
     padding: 6px 10px;
     border-radius: 6px;
     cursor: pointer;
+    color: white;
+}
+
+.delete-btn {
+    background: #d32f2f;
 }
 
 .delete-btn:hover {
     background: #b71c1c;
 }
 
-.claim-btn {
+.claim-btn,
+.approve-btn {
     background: #2e7d32;
-    color: white;
-    border: none;
-    padding: 6px 10px;
-    border-radius: 6px;
-    cursor: pointer;
 }
 
-.claim-btn:hover {
+.claim-btn:hover,
+.approve-btn:hover {
     background: #1b5e20;
+}
+
+.reject-btn {
+    background: #ef6c00;
+}
+
+.reject-btn:hover {
+    background: #e65100;
+}
+
+.action-row {
+    margin-top: 10px;
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+}
+
+.status-tag {
+    display: inline-block;
+    margin-top: 10px;
+    margin-bottom: 8px;
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.status-available {
+    background: #e8f5e9;
+    color: #1b5e20;
+}
+
+.status-requested {
+    background: #fff8e1;
+    color: #e65100;
+}
+
+.status-claimed {
+    background: #e3f2fd;
+    color: #0d47a1;
 }
 
 .claimed-label {
     display: inline-block;
+    margin-top: 10px;
     padding: 6px 10px;
     background: #ccc;
     border-radius: 6px;
