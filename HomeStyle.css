@@ -106,13 +106,6 @@ h1 {
     color: #1b5e20;
 }
 
-.quote {
-    font-size: 18px;
-    margin-top: 15px;
-    color: #2e7d32;
-    font-style: italic;
-}
-
 @keyframes fadeIn {
     from { opacity: 0; transform: translateY(15px); }
     to { opacity: 1; transform: translateY(0); }
@@ -124,12 +117,11 @@ h1 {
 }
 
 .about-container {
-    background: rgba(255,255,255,0.95);
+    background: rgba(255,255,255,0.85);
     padding: 60px;
     max-width: 850px;
     margin: 60px auto;
     border-radius: 18px;
-    box-shadow: 0 15px 35px rgba(0,0,0,0.08);
     text-align: left;
 }
 
@@ -158,12 +150,6 @@ h1 {
 .objectives li {
     margin: 8px 0;
     line-height: 1.7;
-}
-
-.sdg {
-    margin-top: 25px;
-    font-weight: 600;
-    color: #1b5e20;
 }
 
 .cta {

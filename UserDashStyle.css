@@ -163,34 +163,6 @@ h3{
     color: #721c24;
 }
 
-.reuse-form {
-    margin: 20px 0;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-}
-
-.reuse-form input,
-.reuse-form select,
-.reuse-form textarea {
-    padding: 8px;
-    border-radius: 6px;
-    border: 1px solid #ccc;
-}
-
-.reuse-form button {
-    background: #2e7d32;
-    color: white;
-    border: none;
-    padding: 8px 15px;
-    border-radius: 6px;
-    cursor: pointer;
-}
-
-.reuse-form button:hover {
-    background: #1b5e20;
-}
-
 /* Tablet */
 @media (max-width: 1024px) {
     .cards {

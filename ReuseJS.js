@@ -1,10 +1,5 @@
 document.addEventListener("DOMContentLoaded", function () {
 
-    document.getElementById("logoutBtn").addEventListener("click", () => {
-    localStorage.removeItem("loggedInUser");
-    window.location.href = "index.html";
-});
-
     const modal = document.getElementById("reuseModal");
     const openBtn = document.querySelector(".add-btn");
     const closeBtn = document.getElementById("closeReuseModal");
